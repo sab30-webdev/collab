@@ -1,0 +1,18 @@
+.container {
+  width: 70vw;
+}
+
+.all-tab {
+  border-bottom: 2px solid #6161ec;
+  display: inline;
+}
+
+.search-div {
+  height: 50px;
+}
+
+.remove-card {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

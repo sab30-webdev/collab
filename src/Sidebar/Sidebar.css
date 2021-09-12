@@ -1,0 +1,47 @@
+.Sidebar-Container {
+  width: 25vw;
+  background-color: white;
+}
+
+hr {
+  color: #ab9f9f;
+}
+
+.text-muted {
+  font-size: 12px;
+}
+
+.progress-container {
+  width: 250px;
+}
+
+.stats {
+  display: inline-block;
+  width: 35px;
+}
+
+.box-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box {
+  height: 65px;
+  width: 65%;
+  background-color: rgb(238 237 238);
+  margin: 5px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.box:hover {
+  border: 0.5px solid gray;
+}
+
+.box p {
+  margin-bottom: 0;
+}

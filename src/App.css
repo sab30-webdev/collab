@@ -1,0 +1,11 @@
+.App-Bar {
+  display: flex;
+  background-color: #f4f6ff;
+}
+
+.signin-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
