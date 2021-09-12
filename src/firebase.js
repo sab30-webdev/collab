@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-var config = {
+var conf = {
   apiKey: "AIzaSyDqBHAObwnnbwxzkBnQIJt7fAaniobuacQ",
   authDomain: "collab-6bb44.firebaseapp.com",
   projectId: "collab-6bb44",
@@ -12,9 +12,8 @@ var config = {
 };
 
 const firebaseApp = !firebase.apps.length
-  ? firebase.initializeApp(config)
+  ? firebase.initializeApp(conf)
   : firebase.app();
 
 export const db = firebaseApp.firestore();
-
 export default firebaseApp;
