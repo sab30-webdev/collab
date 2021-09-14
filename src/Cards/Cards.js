@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setTotal, setAvailable } from "../redux/stateSlice";
+import { setTotal, setInProgress } from "../redux/stateSlice";
 import { db } from "../firebase";
+import { Spinner } from "react-bootstrap";
 import Card from "./Card";
 import "./Cards.css";
 
@@ -16,18 +17,17 @@ const Cards = ({ user }) => {
       db.collection("projects")
         .get()
         .then((snapshot) => {
-          let list = [];
+          const list = [];
           let availableNumberOfProjects = 0;
           snapshot.forEach((doc) => {
-            if (doc.data().available) {
+            list.push({ ...doc.data(), id: doc.id });
+            if (doc.data().inProgress) {
               availableNumberOfProjects += 1;
             }
-            list.push({ ...doc.data(), id: doc.id });
           });
           setProjects(list);
           dispatch(setTotal(list.length));
-          console.log();
-          dispatch(setAvailable(availableNumberOfProjects));
+          dispatch(setInProgress(availableNumberOfProjects));
         });
     }
     fetchData();
@@ -39,12 +39,13 @@ const Cards = ({ user }) => {
       img: "https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-1024.png",
       uid: user.uid,
     };
-    if (!data.hasOwnProperty("available")) {
-      newData.available = true;
+    if (!data.hasOwnProperty("inProgress")) {
+      newData.inProgress = true;
     }
     if (edit) {
       await db.collection("projects").doc(did).delete();
     }
+    setRefresh(!refresh);
     await db.collection("projects").add(newData);
     setRefresh(!refresh);
   };
@@ -57,48 +58,58 @@ const Cards = ({ user }) => {
   }
 
   return (
-    <div className="container mx-auto m-5">
-      <h2 className="ms-3" style={{ display: "inline" }}>
-        Projects
-      </h2>
-      <div className="search-div">
-        <p
-          className="ms-3 my-0 all-tab"
-          style={{ position: "relative", top: "16px", cursor: "pointer" }}
-        >
-          All
-        </p>
-        <input
-          className="form-control float-end w-25"
-          type="search"
-          placeholder="Search by project name"
-          aria-label="Search"
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+    <>
+      <div className="container mx-auto m-5">
+        <h2 className="ms-3" style={{ display: "inline" }}>
+          Projects
+        </h2>
+        <div className="search-div">
+          <p
+            className="ms-3 my-0 all-tab"
+            style={{ position: "relative", top: "16px", cursor: "pointer" }}
+          >
+            All
+          </p>
+          <input
+            className="form-control float-end w-25"
+            type="search"
+            placeholder="Search by project name"
+            aria-label="Search"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <hr className="mt-0" />
+        <div className="cards-parent">
+          {projects.length !== 0 ? (
+            <div className="row">
+              {projects
+                .filter((val) =>
+                  val.projectName
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                )
+                .map((p) => (
+                  <Card
+                    projectName={p.projectName}
+                    authorName={p.authorName}
+                    desc={p.desc}
+                    img={p.img}
+                    details={p}
+                    user={user}
+                    key={p.id}
+                    did={p.id}
+                    removeData={removeData}
+                    addData={addData}
+                  />
+                ))}
+              <Card addData={addData} />
+            </div>
+          ) : (
+            <Spinner animation="grow" className="spinner" />
+          )}
+        </div>
       </div>
-      <hr className="mt-0" />
-      <div className="row">
-        {projects
-          .filter((val) =>
-            val.projectName.toLowerCase().includes(searchTerm.toLowerCase())
-          )
-          .map((p, idx) => (
-            <Card
-              projectName={p.projectName}
-              authorName={p.authorName}
-              desc={p.desc}
-              img={p.img}
-              details={p}
-              user={user}
-              key={idx}
-              did={p.id}
-              removeData={removeData}
-              addData={addData}
-            />
-          ))}
-        <Card addData={addData} />
-      </div>
-    </div>
+    </>
   );
 };
 

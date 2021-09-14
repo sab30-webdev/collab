@@ -16,3 +16,13 @@
   right: 0;
   top: 0;
 }
+
+.cards-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  width: 100%;
+}

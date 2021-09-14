@@ -1,6 +1,7 @@
 .App-Bar {
   display: flex;
   background-color: #f4f6ff;
+  min-height: 100vh;
 }
 
 .signin-button {

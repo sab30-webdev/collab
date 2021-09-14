@@ -3,27 +3,14 @@ import stats from "../assets/stats.gif";
 import "./Sidebar.css";
 
 const SideBar = () => {
-  const { total, available } = useSelector((state) => state.state);
-  // const [t, setT] = useState(total);
-
-  // useEffect(() => {
-  //   async function fetch() {
-  //     const ref = await db
-  //       .collection("global")
-  //       .doc("Oz9IjNO2VY8hHYeETy4H")
-  //       .get();
-  //     const total = ref.data().total;
-  //     setTotal(total);
-  //   }
-  //   fetch();
-  // }, []);
+  const { total, inProgress } = useSelector((state) => state.sidebarState);
 
   return (
     <div className="Sidebar-Container">
       <div className="mt-4 mx-3">
         <h3 className="fw-bold">Collab</h3>
         <p className="text-muted fw-normal m-0">
-          Find the right project that suits you
+          Create/Find your team to build projects
         </p>
       </div>
       <hr style={{ marginTop: "60px" }} />
@@ -39,12 +26,12 @@ const SideBar = () => {
         <div className="item-1 box">
           {" "}
           <p className="text-muted">Available/In Progress</p>
-          <h4>{available}</h4>
+          <h4>{inProgress}</h4>
         </div>
         <div className="item-2 box">
           {" "}
           <p className="text-muted">Completed</p>
-          <h4>{total - available}</h4>
+          <h4>{total - inProgress}</h4>
         </div>
       </div>
     </div>

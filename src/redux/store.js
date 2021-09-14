@@ -3,6 +3,6 @@ import stateReducer from "./stateSlice";
 
 export const store = configureStore({
   reducer: {
-    state: stateReducer,
+    sidebarState: stateReducer,
   },
 });

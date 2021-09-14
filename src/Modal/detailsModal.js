@@ -1,4 +1,4 @@
-import { Modal } from "react-bootstrap";
+import { Modal, Badge } from "react-bootstrap";
 
 const ProjectDetails = ({ show, details, handleClose }) => {
   return (
@@ -43,6 +43,11 @@ const ProjectDetails = ({ show, details, handleClose }) => {
           </a>
         </div>
       </Modal.Body>
+      <Modal.Footer>
+        <Badge pill bg="info">
+          {details.inProgress ? "Available" : "Completed"}
+        </Badge>
+      </Modal.Footer>
     </Modal>
   );
 };

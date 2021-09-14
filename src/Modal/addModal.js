@@ -4,9 +4,7 @@ import { Modal, Form, Button } from "react-bootstrap";
 const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
   const [projectData, setProjectData] = useState(null);
   const [editData, setEditData] = useState(details);
-  const [state, setState] = useState(
-    details !== null ? details.available : true
-  );
+  const [checked, setChecked] = useState(details && details.inProgress);
 
   const onChange = (e) => {
     if (!edit) {
@@ -16,14 +14,10 @@ const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleCheck = (e) => {
     let obj = editData;
-    if (e.target.value === "true") {
-      obj.available = true;
-    } else {
-      obj.available = false;
-    }
-    setState(e.target.value);
+    obj.inProgress = e.target.checked;
+    setChecked(e.target.checked);
     setEditData(obj);
   };
 
@@ -31,12 +25,11 @@ const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
     event.preventDefault();
     if (!edit) {
       addData(projectData, null, edit);
-      setEditData(null);
+      setProjectData(null);
     } else {
       addData(editData, did, edit);
     }
     handleClose("addDetailsModal");
-    setProjectData(null);
   };
 
   return (
@@ -158,14 +151,14 @@ const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
             </Form.Group>
             {edit && (
               <Form.Group>
-                <Form.Select
-                  aria-label="Default select example"
-                  onChange={handleChange}
-                  value={state}
-                >
-                  <option value={true}>Yes</option>
-                  <option value={false}>No</option>
-                </Form.Select>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch"
+                  label="In Progress"
+                  name="inProgress"
+                  checked={checked}
+                  onChange={handleCheck}
+                />
               </Form.Group>
             )}
           </Modal.Body>
