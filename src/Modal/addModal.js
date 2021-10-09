@@ -37,7 +37,7 @@ const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
       <Modal show={show} onHide={() => handleClose("addDetailsModal")}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header closeButton>
-            <h6>Add Project Details</h6>
+            <h6>{edit ? "Edit" : "Add"} Project Details</h6>
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-3">
