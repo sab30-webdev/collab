@@ -36,11 +36,11 @@ hr {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  padding: 5px;
+  padding: 3px;
 }
 
 .box:hover {
-  border: 5px solid black;
+  border: 3px solid black;
 }
 
 .box p {
