@@ -146,12 +146,12 @@ const AddDetails = ({ show, handleClose, addData, edit, details, did }) => {
             <Form.Group className="mb-3">
               <FloatingLabel
                 controlId="floatingInput"
-                label="Type of the project (opensource/personal)"
+                label="Project Type (opensource/personal)"
                 className="mb-3"
               >
                 <Form.Control
                   type="text"
-                  placeholder="Type of the project (opensource/personal)"
+                  placeholder="Project Type (opensource/personal)"
                   name="projectType"
                   onChange={onChange}
                   required

@@ -15,6 +15,7 @@ const Cards = ({ user }) => {
   useEffect(() => {
     function fetchData() {
       db.collection("projects")
+        .orderBy("createdAt", "desc")
         .get()
         .then((snapshot) => {
           const list = [];
@@ -38,6 +39,7 @@ const Cards = ({ user }) => {
       ...data,
       img: "https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-1024.png",
       uid: user.uid,
+      createdAt: new Date(),
     };
     if (!data.hasOwnProperty("inProgress")) {
       newData.inProgress = true;
@@ -80,7 +82,8 @@ const Cards = ({ user }) => {
         </div>
         <hr className="mt-0" />
         <div className="cards-parent">
-          {projects.length !== 0 ? (
+          {/* {projects.length !== 0 ? ( */}
+          {true ? (
             <div className="row">
               {projects
                 .filter((val) =>

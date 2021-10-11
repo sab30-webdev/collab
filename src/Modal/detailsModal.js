@@ -1,4 +1,5 @@
 import { Modal, Badge } from "react-bootstrap";
+import TimeAgo from "timeago-react";
 
 const ProjectDetails = ({ show, details, handleClose }) => {
   return (
@@ -21,7 +22,7 @@ const ProjectDetails = ({ show, details, handleClose }) => {
           <strong>Project Type</strong> : {details.projectType}
         </p>
         <div>
-          <h4>Contact :-</h4>
+          <h4>Contact :</h4>
           {details.phoneNumber && (
             <p>
               <strong>Phone</strong> : {details.phoneNumber}
@@ -44,8 +45,11 @@ const ProjectDetails = ({ show, details, handleClose }) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
+        <Badge bg="warning" text="dark">
+          Posted <TimeAgo datetime={details.createdAt.toDate()} />
+        </Badge>{" "}
         <Badge pill bg="info">
-          {details.inProgress ? "Available" : "Completed"}
+          {details.inProgress ? "Available / Inprogress" : "Completed"}
         </Badge>
       </Modal.Footer>
     </Modal>

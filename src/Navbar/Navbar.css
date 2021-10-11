@@ -1,9 +1,12 @@
 .main {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.3fr;
 }
 
 .user {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .user img {
@@ -16,13 +19,17 @@
 .user h2 {
   font-size: 14px;
   margin-right: 10px;
-  margin-top: 15px;
+  margin-top: 8px;
   color: #464646;
 }
 
 .signout {
   cursor: pointer;
-  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px;
+  padding-top: 6px;
 }
 
 .date {

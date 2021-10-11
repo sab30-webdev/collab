@@ -27,6 +27,7 @@ const Card = ({
       setShowAddModal(true);
     }
   };
+
   const handleClose = (d) => {
     if (d === "detailsModal") {
       setShowDetailsModal(false);
@@ -38,8 +39,8 @@ const Card = ({
   return projectName ? (
     <div className="col-sm-4 ">
       <div className="card m-2 max-auto">
-        {user.uid === details.uid && (
-          <>
+        {user.uid === details.uid ? (
+          <div>
             <button
               className="btn btn-outline-secondary"
               onClick={() => handleShow("addDetailsModal")}
@@ -52,7 +53,9 @@ const Card = ({
               aria-label="Close"
               onClick={() => removeData(did)}
             ></button>
-          </>
+          </div>
+        ) : (
+          <div style={{ width: "100%", height: "37.685px" }}></div>
         )}
         <img
           className="card-img-top image--cover mx-auto"
@@ -62,7 +65,7 @@ const Card = ({
         <div className="card-block">
           <h4 className="card-title text-center">{projectName}</h4>
           <p className="card-text text-center">
-            <small className="text-muted">{authorName}</small>
+            <small className="text-muted">By {authorName}</small>
           </p>
           <hr />
           <p className="card-text pos text-center p-1 mb-3 fw-bold text-muted">
