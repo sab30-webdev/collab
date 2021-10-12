@@ -1,9 +1,20 @@
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { db } from "../firebase";
 import stats from "../assets/stats.gif";
 import "./Sidebar.css";
 
 const SideBar = () => {
   const { total, inProgress } = useSelector((state) => state.sidebarState);
+  const [users, setUsers] = useState(0);
+
+  useEffect(() => {
+    db.collection("users")
+      .get()
+      .then((snapshot) => {
+        setUsers(snapshot.size);
+      });
+  }, []);
 
   return (
     <div className="Sidebar-Container">
@@ -32,6 +43,11 @@ const SideBar = () => {
           {" "}
           <p className="text-muted">Completed</p>
           <h4>{total - inProgress}</h4>
+        </div>
+        <div className="item-3 box">
+          {" "}
+          <p className="text-muted">User Count</p>
+          <h4>{users}</h4>
         </div>
       </div>
     </div>

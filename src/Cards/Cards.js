@@ -10,6 +10,7 @@ const Cards = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [projects, setProjects] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [showAllCards, setShowAllCards] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,6 +34,13 @@ const Cards = ({ user }) => {
     }
     fetchData();
   }, [refresh, dispatch]);
+
+  useEffect(() => {
+    function updateUsers() {
+      db.collection("users").doc(user.uid).set({});
+    }
+    updateUsers();
+  }, [user.uid]);
 
   const addData = async (data, did, edit) => {
     let newData = {
@@ -61,16 +69,22 @@ const Cards = ({ user }) => {
 
   return (
     <>
-      <div className="container mx-auto m-5">
+      <div className="container mx-auto mt-4 m-5">
         <h2 className="ms-3" style={{ display: "inline" }}>
           Projects
         </h2>
-        <div className="search-div">
+        <div className="search-div" style={{ marginTop: "1rem" }}>
           <p
             className="ms-3 my-0 all-tab"
-            style={{ position: "relative", top: "16px", cursor: "pointer" }}
+            onClick={() => setShowAllCards(true)}
           >
             All
+          </p>
+          <p
+            className="ms-3 my-0 all-tab"
+            onClick={() => setShowAllCards(false)}
+          >
+            InProgress
           </p>
           <input
             className="form-control float-end w-25"
@@ -82,15 +96,16 @@ const Cards = ({ user }) => {
         </div>
         <hr className="mt-0" />
         <div className="cards-parent">
-          {/* {projects.length !== 0 ? ( */}
-          {true ? (
+          {projects.length !== 0 ? (
             <div className="row">
               {projects
-                .filter((val) =>
-                  val.projectName
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
-                )
+                .filter((val) => {
+                  return showAllCards
+                    ? val.projectName
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    : val.inProgress === true;
+                })
                 .map((p) => (
                   <Card
                     projectName={p.projectName}

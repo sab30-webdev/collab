@@ -27,7 +27,11 @@ const Navbar = ({ signout, user }) => {
     <div className="App">
       <nav className="navbar navbar-light bg-light ">
         <span className="navbar-brand mb-0 h1 ms-3 fs-2">
-          <ion-icon name="logo-google"></ion-icon>
+          <img
+            src="https://img.icons8.com/color/48/000000/hexa.png"
+            alt="logo"
+            style={{ width: "35px" }}
+          />
         </span>
         {user && (
           <div className="main">

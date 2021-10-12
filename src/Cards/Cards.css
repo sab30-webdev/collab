@@ -4,7 +4,21 @@
 
 .all-tab {
   border-bottom: 2px solid #6161ec;
-  display: inline;
+  display: inline-block;
+  user-select: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.all-tab:hover {
+  background-color: #c0e2ff;
+}
+
+.all-tab:active {
+  background-color: #9ed2ff;
+  border-bottom: 0px;
+  transform: translate(0, 0.3rem);
 }
 
 .search-div {
