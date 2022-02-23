@@ -1,46 +1,47 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setTotal, setInProgress } from "../redux/stateSlice";
+import {
+  onSnapshot,
+  collection,
+  deleteDoc,
+  doc,
+  addDoc,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../firebase";
-import { Spinner } from "react-bootstrap";
+import { setTotal, setInProgress } from "../redux/reducers/counterSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "./Card";
+import { Spinner } from "react-bootstrap";
 import "./Cards.css";
 
-const Cards = ({ user }) => {
+const Cards = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [projects, setProjects] = useState([]);
-  const [refresh, setRefresh] = useState(false);
   const [showAllCards, setShowAllCards] = useState(false);
   const dispatch = useDispatch();
+  const [projects, setProjects] = useState([]);
+  const { user } = useSelector((state) => state.authState);
 
   useEffect(() => {
     function fetchData() {
-      db.collection("projects")
-        .orderBy("createdAt", "desc")
-        .get()
-        .then((snapshot) => {
-          const list = [];
-          let availableNumberOfProjects = 0;
-          snapshot.forEach((doc) => {
-            list.push({ ...doc.data(), id: doc.id });
-            if (doc.data().inProgress) {
-              availableNumberOfProjects += 1;
-            }
-          });
-          setProjects(list);
-          dispatch(setTotal(list.length));
-          dispatch(setInProgress(availableNumberOfProjects));
+      const colRef = collection(db, "projects");
+      const ref = query(colRef, orderBy("createdAt", "desc"));
+      onSnapshot(ref, (snapshot) => {
+        const list = [];
+        let availableNumberOfProjects = 0;
+        snapshot.forEach((doc) => {
+          list.push({ ...doc.data(), id: doc.id });
+          if (doc.data().inProgress) {
+            availableNumberOfProjects += 1;
+          }
         });
+        setProjects(list);
+        dispatch(setTotal(list.length));
+        dispatch(setInProgress(availableNumberOfProjects));
+      });
     }
     fetchData();
-  }, [refresh, dispatch]);
-
-  useEffect(() => {
-    function updateUsers() {
-      db.collection("users").doc(user.uid).set({});
-    }
-    updateUsers();
-  }, [user.uid]);
+  }, [dispatch]);
 
   const addData = async (data, did, edit) => {
     let newData = {
@@ -53,51 +54,46 @@ const Cards = ({ user }) => {
       newData.inProgress = true;
     }
     if (edit) {
-      await db.collection("projects").doc(did).delete();
+      deleteDoc(doc(db, "projects", did));
     }
-    setRefresh(!refresh);
-    await db.collection("projects").add(newData);
-    setRefresh(!refresh);
+    addDoc(collection(db, "projects"), newData);
   };
 
   async function removeData(did) {
-    if (window.confirm("Do you want to remove this project?")) {
-      await db.collection("projects").doc(did).delete();
-      setRefresh(!refresh);
-    }
+    deleteDoc(doc(db, "projects", did));
   }
 
   return (
     <>
-      <div className="container mx-auto mt-4 m-5">
-        <h2 className="ms-3" style={{ display: "inline" }}>
+      <div className='container mx-auto mt-4 m-5'>
+        <h2 className='ms-3' style={{ display: "inline" }}>
           Projects
         </h2>
-        <div className="search-div" style={{ marginTop: "1rem" }}>
+        <div className='search-div' style={{ marginTop: "1rem" }}>
           <p
-            className="ms-3 my-0 all-tab"
+            className='ms-3 my-0 all-tab'
             onClick={() => setShowAllCards(true)}
           >
             All
           </p>
           <p
-            className="ms-3 my-0 all-tab"
+            className='ms-3 my-0 all-tab'
             onClick={() => setShowAllCards(false)}
           >
             InProgress
           </p>
           <input
-            className="form-control float-end w-25"
-            type="search"
-            placeholder="Search by project name"
-            aria-label="Search"
+            className='form-control float-end w-25'
+            type='search'
+            placeholder='Search by project name'
+            aria-label='Search'
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <hr className="mt-0" />
-        <div className="cards-parent">
+        <hr className='mt-0' />
+        <div className='cards-parent'>
           {projects.length !== 0 ? (
-            <div className="row">
+            <div className='row'>
               {projects
                 .filter((val) => {
                   return showAllCards
@@ -123,7 +119,7 @@ const Cards = ({ user }) => {
               <Card addData={addData} />
             </div>
           ) : (
-            <Spinner animation="grow" className="spinner" />
+            <Spinner animation='grow' className='spinner' />
           )}
         </div>
       </div>

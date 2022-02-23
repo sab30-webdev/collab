@@ -1,41 +1,55 @@
 import Navbar from "./Navbar/Navbar";
 import Cards from "./Cards/Cards";
 import SideBar from "./Sidebar/Sidebar";
-import withFirebaseAuth from "react-with-firebase-auth";
-import firebaseApp from "./firebase";
-import firebase from "firebase/app";
+import { init } from "./firebase";
 import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Login from "./Login/Login";
+import ProtectedRoute from "./AuthRoute/ProtectedRoute";
+import PublicRoute from "./AuthRoute/PublicRoute";
+import { useEffect } from "react";
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "./firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const firebaseAppAuth = firebaseApp.auth();
-const providers = {
-  googleProvider: new firebase.auth.GoogleAuthProvider(),
-};
+const App = () => {
+  init();
+  const auth = getAuth();
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const usersRef = await doc(db, "users", user.uid);
+        setDoc(usersRef, {});
+      }
+    });
+  }, [auth]);
 
-const App = ({ user, signOut, signInWithGoogle }) => {
   return (
     <>
-      <Navbar signout={signOut} user={user} />
-      {user ? (
-        <div className="App-Bar">
-          <Cards user={user} />
-          <SideBar />
-        </div>
-      ) : (
-        <div className="signin-button">
-          <button
-            type="button"
-            className="btn btn-dark"
-            onClick={signInWithGoogle}
-          >
-            Sign in with Google
-          </button>
-        </div>
-      )}
+      <Navbar />
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path='home'
+          element={
+            <ProtectedRoute>
+              <div className='App-Bar'>
+                <Cards />
+                <SideBar />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </>
   );
 };
 
-export default withFirebaseAuth({
-  providers,
-  firebaseAppAuth,
-})(App);
+export default App;

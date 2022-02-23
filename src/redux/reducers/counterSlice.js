@@ -6,7 +6,7 @@ const initialState = {
 };
 
 export const stateSlice = createSlice({
-  name: "state",
+  name: "counter",
   initialState,
   reducers: {
     setTotal: (state, action) => {
